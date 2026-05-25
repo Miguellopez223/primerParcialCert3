@@ -34,6 +34,7 @@ public class EmpresaService {
         }
 
         Empresa empresa1 = new Empresa();
+        empresa1.setNit(empresa.getNit());
         empresa1.setNombre(empresa.getNombre());
         empresa1.setDescripcion(empresa.getDescripcion());
         this.repository.save(empresa1);
@@ -76,6 +77,14 @@ public class EmpresaService {
     @Transactional(readOnly = true)
     public Optional<Empresa> findByID(String id) {
         return this.repository.findById(id);
+    }
+
+    @Transactional
+    public void delete(String id) throws Exception {
+        if (!this.repository.existsById(id)) {
+            throw new Exception("No existe la empresa con id: " + id);
+        }
+        this.repository.deleteById(id);
     }
 
     // ================================================================

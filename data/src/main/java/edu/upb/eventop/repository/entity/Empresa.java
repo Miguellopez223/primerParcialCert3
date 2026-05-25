@@ -14,6 +14,10 @@ public class Empresa extends AuditableEntity{
     @UuidGenerator
     private String id;
 
+    @Column(name = "nit", length = 50, nullable = false,
+            comment = "NIT de la empresa")
+    private String nit;
+
     @Column(name = "nombre", length = 50, nullable = false,
             comment = "Esta columna almacena el nombre del evento")
     private String nombreEmpresa;
@@ -28,6 +32,14 @@ public class Empresa extends AuditableEntity{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
     }
 
     public String getNombre() {

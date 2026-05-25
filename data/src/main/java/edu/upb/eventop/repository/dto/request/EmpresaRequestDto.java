@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmpresaRequestDto {
+    private String nit;
     @JsonProperty("nombre_empresa")
     private String nombre; //nombre_empresa;
     private String descripcion;

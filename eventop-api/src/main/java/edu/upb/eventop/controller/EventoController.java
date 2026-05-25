@@ -30,6 +30,18 @@ public class EventoController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EventoResponseDto> buscarPorId(@PathVariable("id") String id) {
+        try {
+            return eventosService.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error al buscar evento por id", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PostMapping("/{empresaId}")
     public ResponseEntity<Void> guardar(
             @PathVariable("empresaId") String empresaId,
@@ -39,6 +51,30 @@ public class EventoController {
             return ResponseEntity.ok().build();
         }catch (Exception e) {
             log.error("Error al listar eventos", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> actualizar(
+            @PathVariable("id") String id,
+            @RequestBody Eventos eventos) {
+        try {
+            this.eventosService.update(id, eventos);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error al actualizar evento", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable("id") String id) {
+        try {
+            this.eventosService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error al eliminar evento", e);
             return ResponseEntity.internalServerError().build();
         }
     }

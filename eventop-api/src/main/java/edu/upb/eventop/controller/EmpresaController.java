@@ -42,6 +42,18 @@ public class EmpresaController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpresaDto> buscarPorId(@PathVariable("id") String id) {
+        try {
+            return empresaService.findByID(id)
+                    .map(e -> ResponseEntity.ok(new EmpresaDto(e)))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error("Error al buscar empresa por id", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> actualizar(@PathVariable("id")String empresaId,
                                         @RequestBody EmpresaRequestDto empresa) {
@@ -50,6 +62,17 @@ public class EmpresaController {
             return ResponseEntity.ok().build();
         }catch (Exception e) {
             log.error("Error al guardar empresa", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable("id") String id) {
+        try {
+            this.empresaService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error al eliminar empresa", e);
             return ResponseEntity.internalServerError().build();
         }
     }

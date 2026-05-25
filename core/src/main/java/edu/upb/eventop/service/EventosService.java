@@ -35,6 +35,29 @@ public class EventosService {
         this.eventosRepository.save(eventos);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<EventoResponseDto> findById(String id) {
+        return this.eventosRepository.findById(id)
+                .map(EventoResponseDto::new);
+    }
+
+    @Transactional
+    public void update(String id, Eventos eventosRequest) throws Exception {
+        Eventos eventos = this.eventosRepository.findById(id)
+                .orElseThrow(() -> new Exception("Evento no encontrado con id: " + id));
+        eventos.setNombre(eventosRequest.getNombre());
+        eventos.setDescripcion(eventosRequest.getDescripcion());
+        this.eventosRepository.save(eventos);
+    }
+
+    @Transactional
+    public void delete(String id) throws Exception {
+        if (!this.eventosRepository.existsById(id)) {
+            throw new Exception("No existe el evento con id: " + id);
+        }
+        this.eventosRepository.deleteById(id);
+    }
+
     // ================================================================
     // TAREA 18/05 — Proyecciones con Spring Data JPA
     // ================================================================
