@@ -2,6 +2,8 @@ package edu.upb.eventop.repository;
 
 import edu.upb.eventop.repository.dto.response.EventoResponseDto;
 import edu.upb.eventop.repository.entity.Eventos;
+import edu.upb.eventop.repository.projection.EventoResumenProjection;
+import edu.upb.eventop.repository.projection.EventoResumenRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -31,4 +33,19 @@ public interface EventosRepository extends JpaRepository<Eventos, String> {
             @Param("p_nombre") String nombre,
             @Param("p_descripcion") String descripcion
     );
+
+    // ================================================================
+    // TAREA 18/05 — Proyecciones con Spring Data JPA
+    // ================================================================
+
+    // PROYECCIÓN A INTERFAZ CON PROYECCIÓN ANIDADA
+    // Spring Data detecta que getEmpresa() apunta a la relación y hace
+    // el JOIN automáticamente, trayendo solo empresa.nombre.
+    List<EventoResumenProjection> findAllProjectedBy();
+
+    // PROYECCIÓN A RECORD CON JOIN EXPLÍCITO
+    // La expresión "new ...Record(e.id, e.nombre, ee.nombre)" aplana
+    // los datos de las dos tablas en un solo record inmutable.
+    @Query("SELECT new edu.upb.eventop.repository.projection.EventoResumenRecord(e.id, e.nombre, ee.nombreEmpresa) FROM Eventos e INNER JOIN e.empresa ee")
+    List<EventoResumenRecord> listarResumenRecord();
 }

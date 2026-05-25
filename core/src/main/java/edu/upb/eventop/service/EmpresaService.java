@@ -5,6 +5,8 @@ import edu.upb.eventop.repository.EmpresaRepository;
 import edu.upb.eventop.repository.dto.request.EmpresaRequestDto;
 import edu.upb.eventop.repository.dto.response.EmpresaDto;
 import edu.upb.eventop.repository.entity.Empresa;
+import edu.upb.eventop.repository.projection.EmpresaNombreProjection;
+import edu.upb.eventop.repository.projection.EmpresaResumenRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,38 @@ public class EmpresaService {
     @Transactional(readOnly = true)
     public Optional<Empresa> findByID(String id) {
         return this.repository.findById(id);
+    }
+
+    // ================================================================
+    // TAREA 18/05 — Proyecciones con Spring Data JPA
+    // ================================================================
+
+    @Transactional(readOnly = true)
+    public List<Empresa> listarEmpresa1() {
+        // Llama al @Query hardcodeado para "Empresa 1"
+        return this.repository.listarEmpresas();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Empresa> buscarPorNombre(String nombre) {
+        // Llama al metodo de consulta derivada de Spring Data JPA
+        return this.repository.findByNombreEmpresa(nombre);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EmpresaDto> buscarPorNombreAux(String nombre) {
+        // Llama al @Query con el parámetro :pNombre
+        return this.repository.findByNombreAux(nombre);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EmpresaNombreProjection> listarProyeccionInterface() {
+        return this.repository.findAllProjectedBy();
+    }
+
+    @Transactional(readOnly = true)
+    public List<EmpresaResumenRecord> listarProyeccionRecord() {
+        return this.repository.listarResumenRecord();
     }
 
 }

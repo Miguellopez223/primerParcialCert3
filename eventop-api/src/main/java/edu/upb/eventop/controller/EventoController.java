@@ -2,6 +2,8 @@ package edu.upb.eventop.controller;
 
 import edu.upb.eventop.repository.dto.response.EventoResponseDto;
 import edu.upb.eventop.repository.entity.Eventos;
+import edu.upb.eventop.repository.projection.EventoResumenProjection;
+import edu.upb.eventop.repository.projection.EventoResumenRecord;
 import edu.upb.eventop.service.EventosService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,32 @@ public class EventoController {
             return ResponseEntity.ok().build();
         }catch (Exception e) {
             log.error("Error al listar eventos", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // ================================================================
+    // TAREA 18/05 — Proyecciones con Spring Data JPA
+    // ================================================================
+
+    // GET /api/v1/eventos/proyecciones/interface
+    @GetMapping("/proyecciones/interface")
+    public ResponseEntity<List<EventoResumenProjection>> proyeccionInterface() {
+        try {
+            return ResponseEntity.ok(eventosService.listarProyeccionInterface());
+        } catch (Exception e) {
+            log.error("Error al listar proyección interfaz de eventos", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // GET /api/v1/eventos/proyecciones/record
+    @GetMapping("/proyecciones/record")
+    public ResponseEntity<List<EventoResumenRecord>> proyeccionRecord() {
+        try {
+            return ResponseEntity.ok(eventosService.listarProyeccionRecord());
+        } catch (Exception e) {
+            log.error("Error al listar proyección record de eventos", e);
             return ResponseEntity.internalServerError().build();
         }
     }

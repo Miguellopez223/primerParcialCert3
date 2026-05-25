@@ -2,6 +2,8 @@ package edu.upb.eventop.repository;
 
 import edu.upb.eventop.repository.dto.response.EmpresaDto;
 import edu.upb.eventop.repository.entity.Empresa;
+import edu.upb.eventop.repository.projection.EmpresaNombreProjection;
+import edu.upb.eventop.repository.projection.EmpresaResumenRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +37,19 @@ public interface EmpresaRepository extends JpaRepository<Empresa, String> {
             @Param("pEmpresaId")String pEmpresaId,
             @Param("pNombre")String nombre,
             @Param("pDescripcion")String descripcion);
+
+    // ================================================================
+    // TAREA 18/05 — Proyecciones con Spring Data JPA
+    // ================================================================
+
+    // PROYECCIÓN A INTERFAZ
+    // Spring Data lee los métodos de EmpresaNombreProjection y genera
+    // automáticamente: SELECT id, nombre FROM empresas
+    List<EmpresaNombreProjection> findAllProjectedBy();
+
+    // PROYECCIÓN A RECORD (expresión de constructor JPQL)
+    // Se debe indicar el paquete completo dentro del new para que
+    // JPQL sepa qué constructor invocar.
+    @Query("SELECT new edu.upb.eventop.repository.projection.EmpresaResumenRecord(e.id, e.nombreEmpresa) FROM Empresa e")
+    List<EmpresaResumenRecord> listarResumenRecord();
 }
